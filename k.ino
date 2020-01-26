@@ -1,56 +1,28 @@
-//TMRpcm library is needed
+const int trigP = 2;  //D4 Or GPIO-2 of nodemcu
+const int echoP = 0;  //D3 Or GPIO-0 of nodemcu
 
-#include "SD.h"
-#define SD_ChipSelectPin 10
-#include "TMRpcm.h"
-#include "SPI.h"
+long duration;
+int distance;
 
-TMRpcm tmrpcm;
-const int buzzerPin = 9; // declaring the PWM pin</p><p>void setup() {
-  
-
-
-
-
-
-const int buttonPin = 2; 
-const int ledPin =  13;
-int buttonState = 0;         // variable for reading the pushbutton status
-
-
-void setup(){
- pinMode(ledPin, OUTPUT);
-  // initialize the pushbutton pin as an input:
-  pinMode(buttonPin, INPUT);
-Serial.begin(9600);
-if(!SD.begin(SD_ChipSelectPin))
-{
-  Serial.println("SD fail");
-  return;
-}
-tmrpcm.setVolume(6);
-
+void setup() {
+pinMode(trigP, OUTPUT);  // Sets the trigPin as an Output
+pinMode(echoP, INPUT);   // Sets the echoPin as an Input
+Serial.begin(9600);      // Open serial channel at 9600 baud rate
 }
 
 void loop() {
 
-    buttonState = digitalRead(buttonPin);
+digitalWrite(trigP, LOW);   // Makes trigPin low
+delayMicroseconds(2);       // 2 micro second delay 
 
-  if (buttonState == HIGH  ){
-tmrpcm.play("test.wav");
-digitalWrite(ledPin, HIGH);
- Serial.print("on");
- Serial.begin(8600);
-pinMode(buzzerPin, OUTPUT); //addigning pin to Output mode</p><p>}</p><p>void loop() {
-  tone(buzzerPin, 50);
-  delay(50);
-  noTone(buzzerPin);
-  delay(100);
+digitalWrite(trigP, HIGH);  // tigPin high
+delayMicroseconds(10);      // trigPin high for 10 micro seconds
+digitalWrite(trigP, LOW);   // trigPin low
 
- }
- else {
-    // turn LED off:
-    digitalWrite(ledPin, LOW);
-  }
+duration = pulseIn(echoP, HIGH);   //Read echo pin, time in microseconds
+distance= duration*0.034/2;        //Calculating actual/real distance
 
+Serial.print("Distance = ");        //Output distance on arduino serial monitor 
+Serial.println(distance);
+delay(3000);                        //Pause for 3 seconds and start measuring distance again
 }
