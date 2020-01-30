@@ -118,7 +118,7 @@ void loop() {
     client.print(" ");      //SPACE BEFORE HTTP/1.1
     client.print("HTTP/1.1");
     client.println();
-    client.println("Host: 192.168.18.142");
+    client.println("Host:192.168.18.142");
     client.println("Connection: close");
     client.println();
     delay(5000);
